@@ -1,0 +1,19 @@
+{
+  "name": "jqku",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.5.0",
+    "cheerio": "^1.0.0-rc.2",
+    "eventproxy": "^1.0.0",
+    "fs": "0.0.1-security",
+    "superagent": "^3.7.0",
+    "superagent-proxy": "^1.0.2"
+  }
+}
