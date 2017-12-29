@@ -28,7 +28,7 @@ pageUrls.forEach(function (pageUrl) {
         var urlArray = 'http://www.jq22.com/' + $('.cover-info').eq(i).find('a').attr('href')
 
         showUrl.push(urlArray)
-        fs.writeFile('./data/showUrl.json', JSON.stringify(showUrl))
+        fs.writeFile('/data/showUrl.json', JSON.stringify(showUrl))
       }
     })
 })
