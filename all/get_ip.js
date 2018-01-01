@@ -4,7 +4,6 @@ var cheerio = require('cheerio')
 var eventproxy = require('eventproxy')
 var fs = require('fs')
 var ep = eventproxy()
-require('superagent-proxy')(superagent)
 
 var ipUsable = require('./proxy/ipUsable.json')
 var ipList = require('./proxy/ipList.json')
