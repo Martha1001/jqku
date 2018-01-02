@@ -1,15 +1,16 @@
 var http = require('http')
 var superagent = require('superagent')
+require('superagent-proxy')(superagent)
 var cheerio = require('cheerio')
 var eventproxy = require('eventproxy')
-var fs = require('fs')
 var ep = eventproxy()
+var fs = require('fs')
 
 var ipUsable = require('./proxy/ipUsable.json')
 var ipList = require('./proxy/ipList.json')
 
 //开心代理
-var kxPageNum = 10
+var kxPageNum = 1
 var kxUrls = []
 
 for (var i = 1; i <= kxPageNum; i++) {
@@ -18,6 +19,7 @@ for (var i = 1; i <= kxPageNum; i++) {
 
 kxUrls.forEach(function (kxUrl) {
   superagent.get(kxUrl)
+    .proxy('http://111.20.46.122:80')
     .set('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
     .end((err, kres) => {
       if (err) {
@@ -30,6 +32,7 @@ kxUrls.forEach(function (kxUrl) {
         var kxPort = $('tbody tr').eq(i).find('td').eq(1).text()
         var kxDl = kxIp + ':' + kxPort
         ep.emit('kxTest', kxDl)
+        console.log(kxDl)
       }
     })
 })
@@ -38,11 +41,11 @@ ep.after('kxTest', kxPageNum * 10, function (kxDls) {
   kxDls.forEach(function (kxDl) {
     let testIp = 'http://' + kxDl
 
-    let ip = {}
-    ip.name = '开心代理'
-    ip.url = testIp
-    ipList.push(ip)
-    fs.writeFile('./proxy/ipList.json', JSON.stringify(ipList))
+    // let ip = {}
+    // ip.name = '开心代理'
+    // ip.url = testIp
+    // ipList.push(ip)
+    // fs.writeFile('./proxy/ipList.json', JSON.stringify(ipList))
 
     superagent.get('http://ip.chinaz.com/getip.aspx')
       .proxy(testIp)
