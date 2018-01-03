@@ -1,41 +1,65 @@
-const http = require('http')
-const superagent = require('superagent')
-require('superagent-proxy')(superagent)
-const cheerio = require('cheerio')
-const fs = require('fs')
+const cheerio = require('cheerio');
 const common = require('./common');
+const c = common.c;
 
 //获取代理列表页
-let pageUrls = [];
 const sites = [
 	{
 		name: 'kx',
-		num: 1,
+		pageNum: 1,
+		pageItem: 10,
 		startUrl: 'http://www.kxdaili.com/dailiip/1/',
 		endUrl: '.html#ip'
 	},
 	{
 		name: 'xc',
-		num: 1,
+		pageNum: 1,
+		pageItem: 99,
 		startUrl: 'http://www.xicidaili.com/nn/'
 	}
 ];
-function dataKx($) {
-	for (let i = 0; i < 10; i++) {
-		ip = $('tbody tr').eq(i).find('td').first().text()
-		port = $('tbody tr').eq(i).find('td').eq(1).text()
-	}
-}
-function dataXc($) {
-	for (let i = 1; i < 10; i++) {
-		ip = $('#ip_list tr').eq(i).find('td').eq(1).text()
-		port = $('#ip_list tr').eq(i).find('td').eq(2).text()
-	}
-}
+let pageUrls = [];
 
-common.getPageUrls(pageUrls, sites);
-common.getData('kx', 10, pageUrls, dataKx);
-common.getData('xc', 99, pageUrls, dataXc);
+// c.getPageUrls(pageUrls, sites);
+// console.log(pageUrls)
+
+let data = { a: 'aa', b: 'bb' }
+// c.fs('/aa/bb/cc/dd.json', data)
+c.mkdirs('./aa/bb/cc/dd', function (ee) {
+	console.log(ee)
+})
+
+
+
+// pageUrls.forEach(function (pageUrl) {
+// 	switch (pageUrl.name) {
+// 		case 'kx':
+// 			c.superagent(pageUrl.url).then(res => {
+// 				let $ = cheerio.load(res.text);
+// 				for (let i = 0; i < 10; i++) {
+// 					let ip = $('tbody tr').eq(i).find('td').first().text()
+// 					let port = $('tbody tr').eq(i).find('td').eq(1).text()
+// 					let dlUrl = 'http://' + ip + ':' + port
+// 					ep.emit(pageUrl.name, dlUrl)
+// 				};
+// 			});
+// 			c.isUsable('有效: 开心代理', pageUrl.name, pageUrl.pageNum, pageUrl.pageItem)
+// 			break
+// 		case 'xc':
+// 			c.superagent(pageUrl.url).then(res => {
+// 				let $ = cheerio.load(res.text);
+// 				for (let i = 1; i < 100; i++) {
+// 					let ip = $('#ip_list tr').eq(i).find('td').eq(1).text()
+// 					let port = $('#ip_list tr').eq(i).find('td').eq(2).text()
+// 					let dlUrl = 'http://' + ip + ':' + port
+// 					ep.emit('xcProxy', dlUrl)
+
+// 				};
+// 			});
+// 			c.isUsable('有效: 西刺代理', pageUrl.name, pageUrl.pageNum, pageUrl.pageItem)
+// 			break
+// 	}
+// });
 
 
 
