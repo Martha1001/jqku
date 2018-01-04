@@ -1,3 +1,4 @@
+//引入
 const path = require("path");
 
 //返回当前平台的path分隔符 ('/')

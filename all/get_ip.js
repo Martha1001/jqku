@@ -12,6 +12,7 @@ var ipList = require('./proxy/ipList.json')
 //开心代理
 var kxPageNum = 1
 var kxUrls = []
+var proxy = 'http://223.241.117.192:8010'
 
 for (var i = 1; i <= kxPageNum; i++) {
   kxUrls.push('http://www.kxdaili.com/dailiip/1/' + i + '.html#ip')
@@ -19,7 +20,7 @@ for (var i = 1; i <= kxPageNum; i++) {
 
 kxUrls.forEach(function (kxUrl) {
   superagent.get(kxUrl)
-    .proxy('http://111.20.46.122:80')
+    .proxy(proxy)
     .set('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
     .end((err, kres) => {
       if (err) {
@@ -77,7 +78,7 @@ for (var i = 1; i <= xcPageNum; i++) {
 
 xcUrls.forEach(function (xcUrl) {
   superagent.get(xcUrl)
-
+    .proxy(proxy)
     .set('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
     .end((err, xres) => {
       if (err) {

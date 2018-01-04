@@ -1,6 +1,8 @@
 const http = require('http')
 const superagent = require('superagent')
 require('superagent-proxy')(superagent)
+var eventproxy = require('eventproxy')
+var ep = eventproxy()
 var fs = require("fs");
 var path = require("path");
 
@@ -21,43 +23,28 @@ class Common {
     });
   };
 
-  //fs: Determine path is available
-  // fs(pathStr, data) {
-  //   function mkdirs(pathStr, callback) {
-  //     fs.exists(pathStr, function (exists) {
-  //       if (exists) {
-  //         callback();
-  //         // fs.writeFile(pathStr, JSON.stringify(data))
-  //       } else {
-  //         console.log(path.dirname(dirname))
-  //         mkdirs(path.dirname(pathStr), function () {
-  //           fs.mkdir(pathStr, callback);
-  //         });
-  //       }
-  //     });
-  //   }
-  // }
-
-  mkdirs(dirname, callback) {
-    fs.exists(dirname, function (exists) {
-      if (exists) {
-        callback();
-        fs.writeFile(dirname,'aa')
-      } else {
-        //console.log(path.dirname(dirname));  
-        common.mkdirs(path.dirname(dirname), function () {
-          console.log(1)
-          fs.mkdir(dirname, callback);
-        });
+  //Create path and file
+  mkdirsSync(dirnameStr) { 
+    if (fs.existsSync(dirnameStr)) {
+      return true;
+    } else {
+      if (common.mkdirsSync(path.dirname(dirnameStr))) {
+        fs.mkdirSync(dirnameStr);
+        return true;
       }
-    });
+    }
+  }
+  createFile(pathStr, data) {
+    let dirname = path.dirname(pathStr)
+    common.mkdirsSync(dirname)
+    fs.writeFile(pathStr, data)
   }
 
   //Http request
   superagent(url, proxy) {
     return new Promise((resolve, reject) => {
       superagent.get(url)
-        .proxy(proxy ? proxy : '')
+        .proxy(proxy)
         .set('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
         .end((err, res) => {
           if (err) {
@@ -85,7 +72,7 @@ class Common {
               proxy.name = name;
               proxy.url = res;
               proxys.push(proxy);
-              fs.writeFile('./proxy/ipUsable.json', JSON.stringify(proxys));
+              common.createFile('./proxy/ipUsable.json', JSON.stringify(proxys));
             }
           })
       })
